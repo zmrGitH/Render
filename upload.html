@@ -65,7 +65,7 @@
           //renderer.addValue("W N Cen", new SimpleFillSymbol().setColor(new Color([255, 255, 0, 0.5])));
           //renderer.addValue("E S Cen", new SimpleFillSymbol().setColor(new Color([127, 127, 127, 0.5])));
           //renderer.addValue("W S Cen", new SimpleFillSymbol().setColor(new Color([0, 0, 0, 0.5])));
-          csv = new CSVLayer("https://zmrgith.github.io/Render/all_month2.csv"); 
+          csv = new CSVLayer("all_month2.csv"); 
           var template = new InfoTemplate("${magType}", "${place}");       //Display only the specified fields
           csv.setInfoTemplate(template);
           csv.setRenderer(renderer);
@@ -88,7 +88,7 @@
         var infoContent = infoContentDesc + infoContentDetails;
         var infoTemplate = new InfoTemplate("Accident details", infoContent);
         
-        csv_heat = new CSVLayer("https://zmrgith.github.io/Render/all_month2.csv"); 
+        csv_heat = new CSVLayer("all_month2.csv"); 
 
        var heatmapRenderer = new HeatmapRenderer({
        outFields: ["magType"],    
