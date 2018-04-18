@@ -34,12 +34,12 @@
           require([
         "esri/map", "esri/layers/CSVLayer","esri/InfoTemplate",
         "esri/symbols/SimpleMarkerSymbol", "esri/symbols/SimpleLineSymbol",
-        "esri/renderers/UniqueValueRenderer", "esri/Color",
+        "esri/renderers/UniqueValueRenderer", "esri/Color","esri/config",
         "dojo/domReady!"
       ], function(
         Map, CSVLayer, InfoTemplate,
         SimpleMarkerSymbol, SimpleLineSymbol,
-        UniqueValueRenderer, Color
+        UniqueValueRenderer, Color, esriConfig
       ) 
         {
           
@@ -65,7 +65,7 @@
           //renderer.addValue("W N Cen", new SimpleFillSymbol().setColor(new Color([255, 255, 0, 0.5])));
           //renderer.addValue("E S Cen", new SimpleFillSymbol().setColor(new Color([127, 127, 127, 0.5])));
           //renderer.addValue("W S Cen", new SimpleFillSymbol().setColor(new Color([0, 0, 0, 0.5])));
-          csv = new CSVLayer(" https://zmrgith.github.io/Render/all_month2.csv"); 
+          csv = new CSVLayer("all_month2.csv"); 
           var template = new InfoTemplate("${magType}", "${place}");       //Display only the specified fields
           csv.setInfoTemplate(template);
           csv.setRenderer(renderer);
@@ -79,16 +79,16 @@
         "esri/layers/FeatureLayer",
         "esri/map",
          "esri/layers/CSVLayer",
-        "esri/renderers/HeatmapRenderer",
+        "esri/renderers/HeatmapRenderer","esri/config",
         "dojo/domReady!"],
-        function (InfoTemplate, FeatureLayer, Map,CSVLayer, HeatmapRenderer){
+        function (InfoTemplate, FeatureLayer, Map,CSVLayer, HeatmapRenderer, esriConfig){
         
         var infoContentDesc = "<p>${numfatal:formatFatalities} died when a ${age} year old ${sex:formatGender} was involved in a fatal speeding accident.</p>";
         var infoContentDetails = "${atmcond:formatConditions}${conszone:formatWorkZone}${alcres:formatAlcoholTestResults}";
         var infoContent = infoContentDesc + infoContentDetails;
         var infoTemplate = new InfoTemplate("Accident details", infoContent);
         
-        csv_heat = new CSVLayer(" https://zmrgith.github.io/Render/all_month2.csv"); 
+        csv_heat = new CSVLayer("all_month2.csv"); 
 
        var heatmapRenderer = new HeatmapRenderer({
        outFields: ["magType"],    
