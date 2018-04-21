@@ -103,8 +103,12 @@
         
 /***************************************************************************关闭渲染*************************************************/ 
       function closerender(){
-       window.location.href = "";   
-      }  
+       var i, lyr, ids = map.graphicsLayerIds;
+            for (i = ids.length -1; i > -1; i--) {
+                lyr = map.getLayer(ids[i]);
+                map.removeLayer(lyr);
+        }   
+      };  
 /***************************************************************************kml*************************************************/ 
 //<input type="button" value="kml图层" onclick="window.open('kml.html')"/>新页面跳转
 //<input type="button" value="kml图层" onclick="window.location.href="'kml.html'"/>当前页面跳转
