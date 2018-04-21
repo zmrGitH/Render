@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
+    <title>Simple Map</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/css/esri.css ">
+    <style>
+     html, body{
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+        #map{
+        height: 90%;
+        width: 100%;
+        margin: 0;
+        padding:0;}
+    </style>
+    <script src="https://js.arcgis.com/3.23/ "></script>
+	<script src="http://code.jquery.com/jquery-1.8.3.js "></script>
+    <script>
+      var map;
+      require(["esri/map",   
+            "esri/layers/GraphicsLayer", 
+            "esri/renderers/ClassBreaksRenderer",   
+            "esri/symbols/SimpleMarkerSymbol",  
+            "esri/symbols/SimpleLineSymbol",  
+			"esri/symbols/SimpleFillSymbol", 
+            "esri/renderers/SimpleRenderer",
+            "esri/renderers/UniqueValueRenderer",
+            "esri/Color",
+             "dojo/on",
+            "esri/geometry/Point",  
+            "esri/graphic",  
+            "dojo/domReady!"  ], 
+            function(Map,   
+            GraphicsLayer,
+            ClassBreaksRenderer,
+            SimpleMarkerSymbol,  
+            SimpleLineSymbol, 
+            SimpleFillSymbol, 			
+            SimpleRenderer,
+            UniqueValueRenderer,                               
+            Color,on, Point, Graphic) 
+            {
+            map = new Map("map", {
+            basemap: "gray",
+            center: [119, 30],
+            zoom: 4
+    });
+	
+		   
+			var gLayer = new GraphicsLayer(); 	
+			map.addLayer(gLayer); 
+
+            map.on("load",function(){  
+               $.get("https://zmrgith.github.io/Render/china1.json",null,function(result){ 
+                //$.get("china.json",null,function(result){ 
+                    var features = result.features;  
+                    for(var i=0;i<features.length;i++)
+                    {  
+                        var feature = features[i]; 
+                        var graphic  = new Graphic(feature);  
+                        gLayer.add(graphic);      
+                    }
+                   
+            var symbol = new SimpleFillSymbol();
+            symbol.setColor(new dojo.Color([0,0,0,0.5]));
+            //create renderer
+            var renderer = new ClassBreaksRenderer(symbol, "population");
+                   
+                   
+            renderer.addBreak(0,2000,new esri.symbol.SimpleFillSymbol().setColor([255, 250, 0,0.5]));
+            renderer.addBreak(2000,4000,new esri.symbol.SimpleFillSymbol().setColor([225, 160, 0,0.5]));
+            renderer.addBreak(4000,6000,new esri.symbol.SimpleFillSymbol().setColor([255,85,0,0.5])); 
+            renderer.addBreak(6000,Infinity,new esri.symbol.SimpleFillSymbol().setColor([255,0,0,0.5]));
+            gLayer.setRenderer(renderer);
+             
+           /* var defaultSymbol = new SimpleFillSymbol().setStyle(SimpleFillSymbol.STYLE_NULL);
+             defaultSymbol.outline.setStyle(SimpleLineSymbol.STYLE_NULL);
+          //create renderer
+          var renderer = new UniqueValueRenderer(defaultSymbol, "ENGTYPE_1");
+          //add symbol for each possible value
+          renderer.addValue("Province", new SimpleFillSymbol().setColor(new Color([255, 0, 0, 0.5])));
+          renderer.addValue("Municipality", new SimpleFillSymbol().setColor(new Color([0, 255, 0, 0.5])));
+          renderer.addValue("Autonomous Region", new SimpleFillSymbol().setColor(new Color([0, 0, 255, 0.5])));
+            gLayer.setRenderer(renderer);*/
+                });  
+            });	
+        });  
+    </script>
+  </head>
+
+  <body>
+    <div id="map"></div>
+  </body>
+</html>
