@@ -146,7 +146,7 @@
             Color,on, Point) 
             {
             var gLayer = new GraphicsLayer();  
-                
+            var mLayer = new GraphicsLayer();    
             $.get("https://zmrgith.github.io/Render/china1.json",null,function(result){ 
                 //$.get("china.json",null,function(result){ 
                     var features = result.features;  
@@ -154,11 +154,11 @@
                     {  
                         var feature = features[i]; 
                         var graphic  = new Graphic(feature);  
-                        //var mgraphic  = new Graphic(feature); 
+                        var mgraphic  = new Graphic(feature); 
                         gLayer.add(graphic);
-                        //mLayer.add(graphic);
+                        mLayer.add(mgraphic);
                     } 
-          
+        smk = new SimpleRenderer(new SimpleLineSymbol().setWidth(0.5).setColor(new Color([255,0,0])));  
         var marker = new SimpleMarkerSymbol().setStyle(SimpleMarkerSymbol.STYLE_CIRCLE).setColor(new Color([0,255,255])).setOutline(new SimpleLineSymbol().setWidth(0.5));
         var renderer = new SimpleRenderer(marker);
 
@@ -186,8 +186,9 @@
 	    var template = new InfoTemplate("属性","省份：<b>${NL_NAME_1}</b><br>人口：<b>${population}</b>");       //Display only the specified fields
             gLayer.setInfoTemplate(template);  
             gLayer.setRenderer(renderer);
-              
-            });    
+            mLayer.renderer= smk;  
+            });
+	    map.addLayer(mLayer);	    
             map.addLayer(gLayer);     
                 
             
