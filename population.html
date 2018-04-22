@@ -69,20 +69,20 @@
         {
             require(["esri/map",   
             "esri/layers/GraphicsLayer",
-            "esri/graphic",
+            "esri/graphic","esri/InfoTemplate",
             "esri/renderers/ClassBreaksRenderer",
             "esri/renderers/SimpleRenderer", 
             "esri/symbols/SimpleMarkerSymbol",  
             "esri/symbols/SimpleLineSymbol",  
-			"esri/symbols/SimpleFillSymbol", 
+	    "esri/symbols/SimpleFillSymbol", 
             "esri/renderers/SimpleRenderer",
             "esri/Color",
              "dojo/on",
             "esri/geometry/Point",              
-            "dojo/domReady!"  ], 
+            "dojo/domReady!"], 
             function(Map,   
             GraphicsLayer,
-            Graphic,
+            Graphic,InfoTemplate,
             ClassBreaksRenderer,
             SimpleRenderer,
             SimpleMarkerSymbol,  
@@ -111,6 +111,8 @@
             renderer.addBreak(2000,4000,new esri.symbol.SimpleFillSymbol().setColor([225, 160, 0,0.8]));
             renderer.addBreak(4000,6000,new esri.symbol.SimpleFillSymbol().setColor([255,85,0,0.8])); 
             renderer.addBreak(6000,Infinity,new esri.symbol.SimpleFillSymbol().setColor([255,0,0,0.8]));
+            var template = new InfoTemplate("属性","省份：<b>${NL_NAME_1}</b><br>人口：<b>${population}</b>");       //Display only the specified fields
+            gLayer.setInfoTemplate(template);    
             gLayer.setRenderer(renderer);
             //map.addLayer(gLayer);     
             });   
@@ -181,6 +183,8 @@
             new Color([216,87,115]), new Color([255,53,106]), //new Color([206,19,97])
           ]
         });
+	    var template = new InfoTemplate("属性","省份：<b>${NL_NAME_1}</b><br>人口：<b>${population}</b>");       //Display only the specified fields
+            gLayer.setInfoTemplate(template);  
             gLayer.setRenderer(renderer);
               
             });    
