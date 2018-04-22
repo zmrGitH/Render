@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    
+<meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+<title>CsvData Renderer</title>
+<link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/css/esri.css">
+<style>
+      html, body, #map{
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+</style>
+<script src="https://js.arcgis.com/3.23/"></script>
+<script>
+    var map;
+ /***************************************************************************初始地图*************************************************/   
+      require([
+        "esri/map",
+        "dojo/domReady!"
+      ], function(Map, domStyle) 
+        {
+        map = new Map("map", {
+          basemap: "topo",
+          center: [ -60, -10 ],
+          zoom: 3
+        });
+    });    
+/***************************************************************************唯一值渲染*************************************************/
+        function addcsvLayer() {
+          require([
+        "esri/map", "esri/layers/CSVLayer","esri/InfoTemplate",
+        "esri/symbols/SimpleMarkerSymbol", "esri/symbols/SimpleLineSymbol",
+        "esri/renderers/UniqueValueRenderer", "esri/Color","esri/config",
+        "dojo/domReady!"
+      ], function(
+        Map, CSVLayer, InfoTemplate,
+        SimpleMarkerSymbol, SimpleLineSymbol,
+        UniqueValueRenderer, Color, esriConfig
+      ) 
+        {
+          
+          var defaultSymbol = new SimpleMarkerSymbol().setStyle(SimpleMarkerSymbol.STYLE_CIRCLE);
+          defaultSymbol.outline.setStyle(new SimpleLineSymbol(SimpleLineSymbol.STYLE_NULL));
+          //create renderer
+          var renderer = new UniqueValueRenderer(defaultSymbol, "magType");
+          //add symbol for each possible value
+          //new SimpleMarkerSymbol("solid", 15, null, color)
+          //renderer.addValue("mwr", new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_DIAMOND,15,null).setColor([255, 0, 0, 0.5]));
+          renderer.addValue("mb", new SimpleMarkerSymbol().setColor([255, 0, 0, 0.5]));
+          renderer.addValue("ml", new SimpleMarkerSymbol().setColor([0, 255, 0, 0.5]));
+          renderer.addValue("md",new SimpleMarkerSymbol().setColor([0, 0, 255, 0.5]));
+          renderer.addValue("Md",new SimpleMarkerSymbol().setColor([255, 0, 255, 0.5]));
+          renderer.addValue("mb_lg",new SimpleMarkerSymbol().setColor([255, 255, 0, 0.5]));
+          renderer.addValue("mwr", new SimpleMarkerSymbol().setColor([0, 255, 255, 0.5]));
+          renderer.addValue("mww", new SimpleMarkerSymbol().setColor([255, 255, 255, 0.5]));
+          //renderer.addValue("mww", new SimpleFillSymbol().setColor(new Color([255, 0, 255, 0.5])));
+          //renderer.addValue("2", new SimpleFillSymbol().setColor(new Color([255, 255, 255, 0.75])));
+          //renderer.addValue("7.1", new SimpleFillSymbol().setColor(new Color([0, 255, 255, 0.5])));
+          //renderer.addValue("W N Cen", new SimpleFillSymbol().setColor(new Color([255, 255, 0, 0.5])));
+          //renderer.addValue("E S Cen", new SimpleFillSymbol().setColor(new Color([127, 127, 127, 0.5])));
+          //renderer.addValue("W S Cen", new SimpleFillSymbol().setColor(new Color([0, 0, 0, 0.5])));
+          csv = new CSVLayer("all_month2.CSV"); 
+          var template = new InfoTemplate("属性","地震类型：<b>${magType}</b><br>地点：<b>${place}</b>");       //Display only the specified fields
+          csv.setInfoTemplate(template);
+          csv.setRenderer(renderer);
+          map.addLayer(csv);
+        })};
+        
+  /***************************************************************************热力图渲染*************************************************/      
+        function addheatLayer(){
+        require([
+        "esri/InfoTemplate",
+        "esri/layers/FeatureLayer",
+        "esri/map","esri/InfoTemplate",
+         "esri/layers/CSVLayer",
+        "esri/renderers/HeatmapRenderer","esri/config",
+        "dojo/domReady!"],
+        function (InfoTemplate, FeatureLayer, Map,InfoTemplate,CSVLayer, HeatmapRenderer, esriConfig){
+        
+        var infoContentDesc = "<p>${numfatal:formatFatalities} died when a ${age} year old ${sex:formatGender} was involved in a fatal speeding accident.</p>";
+        var infoContentDetails = "${atmcond:formatConditions}${conszone:formatWorkZone}${alcres:formatAlcoholTestResults}";
+        var infoContent = infoContentDesc + infoContentDetails;
+        var infoTemplate = new InfoTemplate("Accident details", infoContent);
+        
+        csv_heat = new CSVLayer("all_month2.CSV"); 
+       var heatmapRenderer = new HeatmapRenderer({
+       outFields: ["depth"],    
+       colors: ["rgba(0, 0, 255, 0)","rgb(0, 0, 255)","rgb(255, 0, 255)", "rgb(255, 0, 0)"],
+       blurRadius: 12,
+       maxPixelIntensity: 250,
+       minPixelIntensity: 10
+       });
+        var template = new InfoTemplate("属性","地震深度：<b>${depth}</b><br>地点：<b>${place}</b>");       //Display only the specified fields
+        csv.setInfoTemplate(template);
+        csv_heat.setRenderer(heatmapRenderer);
+        map.addLayer(csv_heat);
+      })};
+        
+/***************************************************************************关闭渲染*************************************************/ 
+      function closerender(){
+       var i, lyr, ids = map.graphicsLayerIds;
+            for (i = ids.length -1; i > -1; i--) {
+                lyr = map.getLayer(ids[i]);
+                map.removeLayer(lyr);
+        }   
+      };  
+/***************************************************************************kml*************************************************/ 
+//<input type="button" value="kml图层" onclick="window.open('kml.html')"/>新页面跳转
+//<input type="button" value="kml图层" onclick="window.location.href="'kml.html'"/>当前页面跳转
+</script>
+</head>
+  
+<body>
+<input type="button" value="唯一值渲染" onclick="addcsvLayer()"/>
+<input type="button" value="热力图渲染" onclick="addheatLayer()"/>
+<input type="button" value="关闭渲染" onclick="closerender()"/>
+<input type="button" value="人口渲染" onclick="window.open('https://zmrgith.github.io/Render/population.html')"/>
+<div id="map"></div>
+
+</body>
+</html>
