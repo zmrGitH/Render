@@ -106,11 +106,12 @@
             //create renderer
             var renderer = new ClassBreaksRenderer(symbol, "population");               
                    
-            renderer.addBreak(0,2000,new esri.symbol.SimpleFillSymbol().setColor([255, 250, 0,0.8]));
-            //renderer.addBreak(1000,2000,new esri.symbol.SimpleFillSymbol().setColor([255, 250, 0,0]));
-            renderer.addBreak(2000,4000,new esri.symbol.SimpleFillSymbol().setColor([225, 160, 0,0.8]));
-            renderer.addBreak(4000,6000,new esri.symbol.SimpleFillSymbol().setColor([255,85,0,0.8])); 
-            renderer.addBreak(6000,Infinity,new esri.symbol.SimpleFillSymbol().setColor([255,0,0,0.8]));
+            renderer.addBreak(0,2000,new esri.symbol.SimpleFillSymbol().setColor([30, 200,0,0.8]));
+            renderer.addBreak(2000,4000,new esri.symbol.SimpleFillSymbol().setColor([60, 160, 0,0.8]));
+            renderer.addBreak(4000,6000,new esri.symbol.SimpleFillSymbol().setColor([100,120,0,0.8])); 
+            renderer.addBreak(6000,8000,new esri.symbol.SimpleFillSymbol().setColor([160,100,0,0.8]));
+	    renderer.addBreak(8000,10000,new esri.symbol.SimpleFillSymbol().setColor([200,150,0,0.8]));
+	    renderer.addBreak(10000,Infinity,new esri.symbol.SimpleFillSymbol().setColor([255,0,0,0.8]));
             var template = new InfoTemplate("属性","省份：<b>${NL_NAME_1}</b><br>人口：<b>${population}</b>");       //Display only the specified fields
             gLayer.setInfoTemplate(template);    
             gLayer.setRenderer(renderer);
@@ -167,20 +168,20 @@
           minSize: 6,
           maxSize: 36,
           minDataValue:1000,
-          maxDataValue:9000,
+          maxDataValue:10000,
           valueUnit: "unknown"
         });
                 
         renderer.setColorInfo({
           field: "population",
           minDataValue: 1000,
-          maxDataValue: 9000,
+          maxDataValue: 10000,
           colors: [
-            new Color([0,104,214]), //new Color([20,120,220]), new Color([39,136,226]),
-            new Color([59,152,232]), //new Color([78,169,237]), new Color([98,185,243]),
-            new Color([131,197,181]), //new Color([164,210,120]), new Color([197,222,58]),
-            new Color([205,188,80]), //new Color([212,155,102]), new Color([220,121,124]),
-            new Color([216,87,115]), new Color([255,53,106]), //new Color([206,19,97])
+            new Color([0,100,200]), //new Color([20,120,220]), new Color([39,136,226]),
+            new Color([60,150,200]), new Color([78,169,240]), new Color([98,185,250]),
+            new Color([131,197,181]), new Color([164,210,120]), new Color([197,222,58]),
+            new Color([205,188,80]), new Color([212,155,102]), new Color([220,121,124]),
+            new Color([216,87,115]), new Color([255,53,106]), new Color([206,19,97])
           ]
         });
 	    var template = new InfoTemplate("属性","省份：<b>${NL_NAME_1}</b><br>人口：<b>${population}</b>");       //Display only the specified fields
