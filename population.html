@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
+    <title>Simple Map</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/css/esri.css ">
+    <style>
+     html, body{
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+        #map{
+        height: 90%;
+        width: 100%;
+        margin: 0;
+        padding:0;}
+    </style>
+    <script src="https://js.arcgis.com/3.23/ "></script>
+	<script src="http://code.jquery.com/jquery-1.8.3.js "></script>
+    <script>
+      var map;
+        
+      require(["esri/map",   
+            "esri/layers/GraphicsLayer", 
+            "dojo/on","esri/symbols/SimpleFillSymbol", 
+            "esri/symbols/SimpleLineSymbol",
+            "esri/renderers/SimpleRenderer",
+            "esri/renderers/UniqueValueRenderer",
+            "esri/graphic","esri/Color",  
+            "dojo/domReady!"  ], 
+            function(Map,   
+            GraphicsLayer,                              
+            on,SimpleFillSymbol,
+            SimpleLineSymbol,SimpleRenderer,
+            UniqueValueRenderer, 
+            Graphic,Color) 
+            {
+            map = new Map("map", {
+            basemap: "streets",
+            center: [119, 30],
+            zoom: 4
+            });
+            var mLayer = new GraphicsLayer(); 	
+			map.addLayer(mLayer); 
+            map.on("load",function(){  
+                $.get("https://zmrgith.github.io/Render/china1.json",null,function(result){  
+                    var features = result.features;  
+                    for(var i=0;i<features.length;i++){  
+                        var feature = features[i]; 
+                        var graphic  = new Graphic(feature);  
+                        mLayer.add(graphic);                                                
+                    }           
+            var defaultSymbol = new SimpleFillSymbol().setStyle(SimpleFillSymbol.STYLE_NULL);
+            defaultSymbol.outline.setStyle(SimpleLineSymbol.STYLE_NULL);
+            var renderer = new UniqueValueRenderer(defaultSymbol, "ENGTYPE_1");
+            renderer.addValue("Province", new SimpleLineSymbol().setColor(new Color([255, 0, 0])));
+            renderer.addValue("Municipality", new SimpleLineSymbol().setColor(new Color([255, 0, 0])));
+            renderer.addValue("Autonomous Region", new SimpleLineSymbol().setColor(new Color([255, 0, 0])));
+            mLayer.setRenderer(renderer);
+                });  
+            });	
+        }); 
+        
+ /*********************************************************分级渲染*************************************************************************/       
+        function classrender()
+        {
+            require(["esri/map",   
+            "esri/layers/GraphicsLayer",
+            "esri/graphic",
+            "esri/renderers/ClassBreaksRenderer",
+            "esri/renderers/SimpleRenderer", 
+            "esri/symbols/SimpleMarkerSymbol",  
+            "esri/symbols/SimpleLineSymbol",  
+			"esri/symbols/SimpleFillSymbol", 
+            "esri/renderers/SimpleRenderer",
+            "esri/Color",
+             "dojo/on",
+            "esri/geometry/Point",              
+            "dojo/domReady!"  ], 
+            function(Map,   
+            GraphicsLayer,
+            Graphic,
+            ClassBreaksRenderer,
+            SimpleRenderer,
+            SimpleMarkerSymbol,  
+            SimpleLineSymbol, 
+            SimpleFillSymbol, 			
+            SimpleRenderer,                              
+            Color,on, Point) 
+            {
+            var gLayer = new GraphicsLayer(); 	  
+            $.get("https://zmrgith.github.io/Render/china1.json",null,function(result){ 
+                //$.get("china.json",null,function(result){ 
+                    var features = result.features;  
+                    for(var i=0;i<features.length;i++)
+                    {  
+                        var feature = features[i]; 
+                        var graphic  = new Graphic(feature);  
+                        gLayer.add(graphic);      
+                    }       
+            var symbol = new SimpleFillSymbol();
+            symbol.setColor(new dojo.Color([0,0,0,0.5]));
+            //create renderer
+            var renderer = new ClassBreaksRenderer(symbol, "population");               
+                   
+            renderer.addBreak(0,2000,new esri.symbol.SimpleFillSymbol().setColor([255, 250, 0,0.8]));
+            //renderer.addBreak(1000,2000,new esri.symbol.SimpleFillSymbol().setColor([255, 250, 0,0]));
+            renderer.addBreak(2000,4000,new esri.symbol.SimpleFillSymbol().setColor([225, 160, 0,0.8]));
+            renderer.addBreak(4000,6000,new esri.symbol.SimpleFillSymbol().setColor([255,85,0,0.8])); 
+            renderer.addBreak(6000,Infinity,new esri.symbol.SimpleFillSymbol().setColor([255,0,0,0.8]));
+            gLayer.setRenderer(renderer);
+            //map.addLayer(gLayer);     
+            });   
+            map.addLayer(gLayer); 
+        })};
+ /***************************************************比例渲染*******************************************************************************/
+        function proportrender()
+        {
+            require(["esri/map",   
+            "esri/layers/GraphicsLayer",
+            "esri/graphic",
+            "esri/renderers/ClassBreaksRenderer",
+            "esri/renderers/SimpleRenderer", 
+            "esri/symbols/SimpleMarkerSymbol",  
+            "esri/symbols/SimpleLineSymbol",  
+			"esri/symbols/SimpleFillSymbol", 
+            "esri/renderers/SimpleRenderer",
+            "esri/Color",
+             "dojo/on",
+            "esri/geometry/Point",              
+            "dojo/domReady!"  ], 
+            function(Map,   
+            GraphicsLayer,
+            Graphic,
+            ClassBreaksRenderer,
+            SimpleRenderer,
+            SimpleMarkerSymbol,  
+            SimpleLineSymbol, 
+            SimpleFillSymbol, 			
+            SimpleRenderer,                              
+            Color,on, Point) 
+            {
+            var gLayer = new GraphicsLayer();  
+                
+            $.get("https://zmrgith.github.io/Render/china1.json",null,function(result){ 
+                //$.get("china.json",null,function(result){ 
+                    var features = result.features;  
+                    for(var i=0;i<features.length;i++)
+                    {  
+                        var feature = features[i]; 
+                        var graphic  = new Graphic(feature);  
+                        //var mgraphic  = new Graphic(feature); 
+                        gLayer.add(graphic);
+                        //mLayer.add(graphic);
+                    } 
+          
+        var marker = new SimpleMarkerSymbol().setStyle(SimpleMarkerSymbol.STYLE_CIRCLE).setColor(new Color([0,255,255])).setOutline(new SimpleLineSymbol().setWidth(0.5));
+        var renderer = new SimpleRenderer(marker);
+
+        renderer.setSizeInfo({
+          field: "population",
+          minSize: 6,
+          maxSize: 36,
+          minDataValue:1000,
+          maxDataValue:9000,
+          valueUnit: "unknown"
+        });
+                
+        renderer.setColorInfo({
+          field: "population",
+          minDataValue: 1000,
+          maxDataValue: 9000,
+          colors: [
+            new Color([0,104,214]), //new Color([20,120,220]), new Color([39,136,226]),
+            new Color([59,152,232]), //new Color([78,169,237]), new Color([98,185,243]),
+            new Color([131,197,181]), //new Color([164,210,120]), new Color([197,222,58]),
+            new Color([205,188,80]), //new Color([212,155,102]), new Color([220,121,124]),
+            new Color([216,87,115]), new Color([255,53,106]), //new Color([206,19,97])
+          ]
+        });
+            gLayer.setRenderer(renderer);
+              
+            });    
+            map.addLayer(gLayer);     
+                
+            
+            
+                
+        })};
+        
+ /***************************************************关闭渲染*******************************************************************************/        
+        function closerender(){
+            var i, lyr, ids = map.graphicsLayerIds;
+            for (i = ids.length -1; i > -1; i--) {
+                lyr = map.getLayer(ids[i]);
+                map.removeLayer(lyr);
+        }};
+/*******************************************************************************************************************************************/
+    </script>
+  </head>
+
+  <body>
+    <input type="button" value="分级渲染" onclick="classrender()"/>
+    <input type="button" value="比例渲染" onclick="proportrender()"/>
+    <input type="button" value="关闭渲染" onclick="closerender()"/>
+    <div id="map"></div>
+  </body>
+</html>
