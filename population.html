@@ -111,7 +111,7 @@
             renderer.addBreak(4000,6000,new esri.symbol.SimpleFillSymbol().setColor([255,150,0,0.8])); 
             renderer.addBreak(6000,8000,new esri.symbol.SimpleFillSymbol().setColor([255,100,0,0.8]));
 	    renderer.addBreak(8000,10000,new esri.symbol.SimpleFillSymbol().setColor([255,50,0,0.8]));
-	    renderer.addBreak(10000,Infinity,new esri.symbol.SimpleFillSymbol().setColor([255,0,0,0]));
+	    renderer.addBreak(10000,Infinity,new esri.symbol.SimpleFillSymbol().setColor([255,0,0,0.8]));
             var template = new InfoTemplate("属性","省份：<b>${NL_NAME_1}</b><br>人口：<b>${population}</b>");       //Display only the specified fields
             gLayer.setInfoTemplate(template);    
             gLayer.setRenderer(renderer);
