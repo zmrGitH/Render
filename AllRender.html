@@ -100,6 +100,7 @@
       })};
         
 /***************************************************************************关闭渲染*************************************************/ 
+    //window.open('https://zmrgith.github.io/Render/population.html')
       function closerender(){
        var i, lyr, ids = map.graphicsLayerIds;
             for (i = ids.length -1; i > -1; i--) {
@@ -118,9 +119,8 @@
 <input type="button" value="唯一值渲染" onclick="addcsvLayer()"/>
 <input type="button" value="热力图渲染" onclick="addheatLayer()"/>
 <input type="button" value="关闭渲染" onclick="closerender()"/>
-</p>
-
-<input type="button" value="人口渲染" onclick="window.open('https://zmrgith.github.io/Render/population.html')"/>
+</p><p>人口：
+<input type="button" value="人口渲染" onclick="onclick="closerender()"/></p>
 <div id="map"></div>
 
 </body>
